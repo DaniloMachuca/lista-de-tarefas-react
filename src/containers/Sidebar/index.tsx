@@ -6,12 +6,12 @@ const Sidebar = () => (
     <div>
       <S.SearchBox type="text" placeholder="Search" />
       <S.Filters>
-        <CardFilter />
-        <CardFilter />
-        <CardFilter />
-        <CardFilter />
-        <CardFilter />
-        <CardFilter active />
+        <CardFilter label="toDo" counter={1} />
+        <CardFilter label="Done" counter={2} />
+        <CardFilter label="Urgent" counter={3} />
+        <CardFilter label="Important" counter={4} />
+        <CardFilter label="Normal" counter={5} />
+        <CardFilter label="All" counter={10} active />
       </S.Filters>
     </div>
   </S.Aside>
