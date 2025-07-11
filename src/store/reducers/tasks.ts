@@ -2,37 +2,51 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import Task from '../../models/Task'
 import * as enums from '../../utils/enums/Task'
 
+type TaskState = {
+  itens: Task[]
+}
+
+const initialState: TaskState = {
+  itens: [
+    {
+      id: 1,
+      title: 'task1',
+      priority: enums.Priority.URGENT,
+      status: enums.Status.TODO,
+      description: 'description task1'
+    },
+    {
+      id: 2,
+      title: 'task2',
+      priority: enums.Priority.IMPORTANT,
+      status: enums.Status.DONE,
+      description: 'description task2'
+    },
+    {
+      id: 3,
+      title: 'task3',
+      priority: enums.Priority.NORMAL,
+      status: enums.Status.TODO,
+      description: 'description task3'
+    }
+  ]
+}
+
 const tasksSlice = createSlice({
   name: 'tasks',
-  initialState: [
-    new Task(
-      'task1',
-      enums.Priority.URGENT,
-      enums.Status.TODO,
-      'description task1',
-      1
-    ),
-    new Task(
-      'task2',
-      enums.Priority.IMPORTANT,
-      enums.Status.DONE,
-      'description task2',
-      2
-    ),
-    new Task(
-      'task3',
-      enums.Priority.NORMAL,
-      enums.Status.TODO,
-      'description task3',
-      3
-    )
-  ],
+  initialState,
   reducers: {
     remove: (state, action: PayloadAction<number>) => {
-      return state.filter((t) => t.id !== action.payload)
+      state.itens = state.itens.filter((t) => t.id !== action.payload)
+    },
+    edit: (state, action: PayloadAction<Task>) => {
+      const taskIndex = state.itens.findIndex((t) => t.id === action.payload.id)
+      if (taskIndex >= 0) {
+        state.itens[taskIndex] = action.payload
+      }
     }
   }
 })
 
-export const { remove } = tasksSlice.actions
+export const { remove, edit } = tasksSlice.actions
 export default tasksSlice.reducer
