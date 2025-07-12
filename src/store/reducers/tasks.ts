@@ -44,9 +44,38 @@ const tasksSlice = createSlice({
       if (taskIndex >= 0) {
         state.itens[taskIndex] = action.payload
       }
+    },
+    add: (state, action: PayloadAction<Omit<Task, 'id'>>) => {
+      const ExistingTask = state.itens.find(
+        (t) =>
+          t.title.toLocaleLowerCase() ===
+          action.payload.title.toLocaleLowerCase()
+      )
+
+      if (ExistingTask) {
+        alert('Task already exists')
+      } else {
+        const lastTask = state.itens[state.itens.length - 1]
+        const newTask = {
+          ...action.payload,
+          id: lastTask ? lastTask.id + 1 : 1
+        }
+        state.itens.push(newTask)
+      }
+    },
+    changeStatus: (
+      state,
+      action: PayloadAction<{ id: number; done: boolean }>
+    ) => {
+      const taskIndex = state.itens.findIndex((t) => t.id === action.payload.id)
+      if (taskIndex >= 0) {
+        state.itens[taskIndex].status = action.payload.done
+          ? enums.Status.DONE
+          : enums.Status.TODO
+      }
     }
   }
 })
 
-export const { remove, edit } = tasksSlice.actions
+export const { remove, edit, add, changeStatus } = tasksSlice.actions
 export default tasksSlice.reducer
